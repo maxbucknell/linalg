@@ -52,6 +52,18 @@ class Matrix:
         """Return whether or not the matrix is square."""
         return self.width == self.height
     
+    @property
+    def determinant (self):
+        """Return the determinant of a square matrix."""
+        if self.is_square:
+            det = 1
+            for idx, row in enumerate(self.row_echelon_form().rows()):
+                det *= row[idx]
+            return det
+        else:
+            raise NotImplementedError(
+                "Determinant only defined for square matrices.")
+    
     def row (self, i):
         """Return the ith row."""
         return Vector(self._m[i])
@@ -81,22 +93,27 @@ class Matrix:
         for col in zip(*self._m):
             yield Vector(*col)
     
-    def _inner (self):
-        """Remove the first row and column from the matrix."""
-        return Matrix(*zip(*tuple(zip(*self._m[1:]))[1:]))
-    
-    def row_echelon_form (self, reduced=False):
+    def row_echelon_form (self):
         """Return the matrix in row echelon form.
-        
-        If the reduced flag is set to True, then the matrix will
-        be fully reduced.
         
         Examples
         --------
         >>> A = Matrix((1, 2, 3), (4, 5, 6), (7, 8, 9))
         >>> A.row_echelon_form()
+        Matrix((1, 2, 3), (0.0, -3.0, -6.0), (0.0, 0.0, 0.0))
         """
-        pass
+        rows = list(self.rows())
+        for idx, row in enumerate(rows):
+            lead = leading_entry(row)
+            if lead == self.width:
+                continue
+            for i in range(idx + 1, self.height):
+                if leading_entry(rows[i]) == lead:
+                    rows[i] -= row * (rows[i][lead] / row[lead])
+                else:
+                    continue
+        rows.sort(key=leading_entry)
+        return Matrix(*rows)
     
     def __getitem__ (self, idx):
         """Return a specific element.
@@ -260,4 +277,4 @@ class Matrix:
         """Return whether two matrices are not equal"""
         return not self == other
 
-from .utils import dot_product, identity
+from .utils import leading_entry, dot_product, identity

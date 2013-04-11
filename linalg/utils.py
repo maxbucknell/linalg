@@ -35,6 +35,16 @@ def levi_civita (i, j, k):
     else:
         return 0
 
+def leading_entry (v):
+    """Return the index of the first non-zero element.
+    
+    If v is a zero vector, the function returns len(v).
+    """
+    idx = 0
+    while idx < len(v) and v[idx] == 0:
+        idx += 1
+    return idx
+
 def inner_product (a, b):
     """Return the {inner, dot, scalar} product of a and b.
     
