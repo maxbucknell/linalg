@@ -107,7 +107,7 @@ class Matrix:
         
         Example
         -------
-        >>> A = Matrix(((1, 2), (3, 4)))
+        >>> A = Matrix((1, 2), (3, 4))
         >>> A[1, 0]
         3
         """
@@ -170,8 +170,15 @@ class Matrix:
             result.append(new_row)
         return Matrix(*result)
     
+    def _vecmul (self, other):
+        "Multiply a matrix by a vector"
+        return Vector(*(dot_product(row, other) for row in self.rows()))
+    
     def __mul__ (self, other):
         """Multiply the matrix by a scalar, a vector or another matrix.
+        
+        Will return a matrix when multiplied by another matrix or a
+        scalar, but will return a vector if other is a vector.
         
         Examples
         --------
@@ -185,23 +192,31 @@ class Matrix:
         """ 
         if isinstance(other, Number):
             return self._scale(other)
-        else:
-            if isinstance(other, Vector):
-                other = Matrix(other, columns=True)
+        elif isinstance(other, Matrix):
             return self._mul(other)
+        elif isinstance(other, Vector):
+            return self._vecmul(other)
+        else:
+            return NotImplemented
     
     def __rmul__ (self, other):
-        """Multiply the matrix by a scalar, or vector.
-        
-        This function is defined separately because matrix
-        multiplication is not commutative.
-        """
+        """Multiply the matrix by a scalar."""
         if isinstance(other, Number):
             return self._scale(other)
         else:
-            if isinstance(other, Vector):
-                other = Matrix(other)
-            return other._mul(self)
+            return NotImplemented
+    
+    def __pow__ (self, idx):
+        
+        if not (self.is_square or isinstance(idx, int)):
+            return NotImplemented
+        elif idx >= 0:
+            result = identity(self.width)
+            for x in range(idx):
+                result *= self
+            return result
+        elif idx < 0:
+            return NotImplemented
     
     def __str__ (self):
         """Return a text representation of the matrix
@@ -245,4 +260,4 @@ class Matrix:
         """Return whether two matrices are not equal"""
         return not self == other
 
-from .utils import dot_product
+from .utils import dot_product, identity
