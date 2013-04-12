@@ -15,14 +15,13 @@ because I wanted to learn Python.
 	9.899494936611665
 	>>> dot_product(a, Vector(1, 4, 3))
 	44
-	>>> M = ((1, 2, 3),
+	>>> M = (
+	... (1, 2, 3),
 	... (4, 7, 6),
 	... (7, 8, 9))
-	>>> A = Matrix(M)
-	>>> A.determinant
+	>>> A = Matrix(*M)
+	>>> print(A.determinant)
 	-24
-	>>> invert(A)
-	Matrix((-0.625, ...), ...)
 	>>> A * a
 	Vector(36, 86, 120)
 	>>> A * Vector(1, 2)
