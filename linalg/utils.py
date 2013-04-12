@@ -6,6 +6,7 @@ own and within linalg itself.
 
 from .vector import Vector
 from .matrix import Matrix
+from fractions import Fraction
 
 def kronecker_delta (i, j):
     """Return 1 if i == j and 0 otherwise."""
@@ -128,7 +129,7 @@ def _reduced (rows):
             lead = leading_entry(rows[idx])
             if lead == len(rows[idx]):
                 continue
-            rows[idx] *= (1/rows[idx][lead])
+            rows[idx] *= Fraction(1, rows[idx][lead])
             for i in range(idx):
                 rows[i] -= rows[idx] * rows[i][lead]
         return rows
@@ -149,7 +150,7 @@ def echelon_form (M, reduced=False):
             continue
         for i in range(idx + 1, M.height):
             if leading_entry(rows[i]) == lead:
-                rows[i] -= row * (rows[i][lead] / row[lead])
+                rows[i] -= row * Fraction(rows[i][lead], row[lead])
             else:
                 continue
     if reduced:
