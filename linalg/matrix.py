@@ -225,7 +225,7 @@ class Matrix:
             return NotImplemented
     
     def __pow__ (self, idx):
-        
+        """Raise the matrix to a power."""
         if not (self.is_square or isinstance(idx, int)):
             return NotImplemented
         elif idx >= 0:
