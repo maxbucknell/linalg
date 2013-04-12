@@ -57,7 +57,7 @@ class Matrix:
         """Return the determinant of a square matrix."""
         if self.is_square:
             det = 1
-            for idx, row in enumerate(self.row_echelon_form().rows()):
+            for idx, row in enumerate(echelon_form(self).rows()):
                 det *= row[idx]
             return det
         else:
@@ -278,4 +278,4 @@ class Matrix:
         """Return whether two matrices are not equal"""
         return not self == other
 
-from .utils import leading_entry, dot_product, identity
+from .utils import leading_entry, dot_product, identity, echelon_form
