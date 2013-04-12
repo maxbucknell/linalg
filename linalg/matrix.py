@@ -77,7 +77,7 @@ class Matrix:
         """Return the ith column."""
         return Vector(tuple(zip(*self._m))[i])
     
-    def columns(self):
+    def columns (self):
         """Return an iterator for the columns.
         
         Example
@@ -92,6 +92,29 @@ class Matrix:
         """
         for col in zip(*self._m):
             yield Vector(*col)
+    
+    def augment (self, *args):
+        """Augment the matrix with some vectors or matrices.
+        
+        Examples
+        --------
+        >>> A = Matrix((1, 2), (3, 4))
+        >>> A + identity(2)
+        Matrix((2, 2), (3, 5))
+        >>> A.augment(_)
+        Matrix((1, 2, 2, 2), (3, 4, 3, 5))
+        >>> A.augment(A.column(0))
+        Matrix((1, 2, 1), (3, 4, 3))
+        >>> A.augment(A.row(0))
+        Matrix((1, 2, 1), (3, 4, 2))
+        """
+        cols = list(self.columns())
+        for aug in args:
+            try:
+                cols.extend(aug.columns())
+            except AttributeError:
+                cols.append(aug)
+        return Matrix(*cols, columns=True)
     
     def __getitem__ (self, idx):
         """Return a specific element.
