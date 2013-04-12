@@ -248,7 +248,7 @@ class Matrix:
         >>> str(A)
         '(<1, 2>, <3, 4>)'
         """
-        return ", ".join(", ".join(str(x) for x in row).join("<>") for row in self._m).join("()")
+        return ", ".join(str(row) for row in self.rows()).join("()")
     
     def __repr__ (self):
         """Return the string necessary to make the matrix.
