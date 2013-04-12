@@ -123,7 +123,17 @@ i = e(0, 3)
 j = e(1, 3)
 k = e(2, 3)
 
-def echelon_form (M):
+def _reduced (rows):
+        for idx in range(len(rows) - 1, -1, -1):
+            lead = leading_entry(rows[idx])
+            if lead == len(rows[idx]):
+                continue
+            rows[idx] *= (1/rows[idx][lead])
+            for i in range(idx):
+                rows[i] -= rows[idx] * rows[i][lead]
+        return rows
+
+def echelon_form (M, reduced=False):
     """Return the matrix in row echelon form.
     
     Examples
@@ -143,6 +153,9 @@ def echelon_form (M):
             else:
                 continue
     rows.sort(key=leading_entry)
+    if reduced:
+        rows = _reduced(rows)
+        rows.sort(key=leading_entry)
     return Matrix(*rows)
 
 def identity (n):
