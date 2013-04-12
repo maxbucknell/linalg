@@ -123,6 +123,28 @@ i = e(0, 3)
 j = e(1, 3)
 k = e(2, 3)
 
+def echelon_form (M):
+    """Return the matrix in row echelon form.
+    
+    Examples
+    --------
+    >>> A = Matrix((1, 2, 3), (4, 5, 6), (7, 8, 9))
+    >>> echelon_form(A)
+    Matrix((1, 2, 3), (0.0, -3.0, -6.0), (0.0, 0.0, 0.0))
+    """
+    rows = list(M.rows())
+    for idx, row in enumerate(rows):
+        lead = leading_entry(row)
+        if lead == M.width:
+            continue
+        for i in range(idx + 1, M.height):
+            if leading_entry(rows[i]) == lead:
+                rows[i] -= row * (rows[i][lead] / row[lead])
+            else:
+                continue
+    rows.sort(key=leading_entry)
+    return Matrix(*rows)
+
 def identity (n):
     """Return the n by n identity matrix.
     

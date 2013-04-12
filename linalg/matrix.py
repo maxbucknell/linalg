@@ -93,28 +93,6 @@ class Matrix:
         for col in zip(*self._m):
             yield Vector(*col)
     
-    def row_echelon_form (self):
-        """Return the matrix in row echelon form.
-        
-        Examples
-        --------
-        >>> A = Matrix((1, 2, 3), (4, 5, 6), (7, 8, 9))
-        >>> A.row_echelon_form()
-        Matrix((1, 2, 3), (0.0, -3.0, -6.0), (0.0, 0.0, 0.0))
-        """
-        rows = list(self.rows())
-        for idx, row in enumerate(rows):
-            lead = leading_entry(row)
-            if lead == self.width:
-                continue
-            for i in range(idx + 1, self.height):
-                if leading_entry(rows[i]) == lead:
-                    rows[i] -= row * (rows[i][lead] / row[lead])
-                else:
-                    continue
-        rows.sort(key=leading_entry)
-        return Matrix(*rows)
-    
     def __getitem__ (self, idx):
         """Return a specific element.
         
