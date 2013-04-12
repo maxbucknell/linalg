@@ -152,10 +152,9 @@ def echelon_form (M, reduced=False):
                 rows[i] -= row * (rows[i][lead] / row[lead])
             else:
                 continue
-    rows.sort(key=leading_entry)
     if reduced:
         rows = _reduced(rows)
-        rows.sort(key=leading_entry)
+    rows.sort(key=leading_entry)
     return Matrix(*rows)
 
 def identity (n):
